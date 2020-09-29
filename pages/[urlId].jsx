@@ -1,20 +1,23 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import axios from '../network/axiosConfig';
 
 const Redirect = ({ urlId }) => {
   const router = useRouter();
+
   useEffect(async () => {
-    const fetchRedirect = async () => {
-      const { data } = await axios.get(`/api/links/${urlId}`);
-      router.push(data.url);
-    };
-    fetchRedirect();
     try {
+      const fetchRedirect = async () => {
+        const { data } = await axios.get(`/api/links/${urlId}`);
+        router.push(data.url);
+      };
+      fetchRedirect();
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error(error);
     }
   }, []);
+
   return <div>Loading...</div>;
 };
 

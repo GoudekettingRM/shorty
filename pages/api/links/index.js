@@ -1,4 +1,4 @@
-import dbConnect from '../../../util/dbConnect.js';
+import dbConnect from '../../../util/dbConnect';
 import randomString from '../../../util/randomString';
 import Link from '../../../models/Link';
 
@@ -10,21 +10,22 @@ export default async (req, res) => {
     case 'GET': {
       try {
         const links = await Link.find({});
-        res.status(200).json({ success: true, links });
+        return res.status(200).json({ success: true, links });
       } catch (error) {
+        // eslint-disable-next-line no-console
         console.log('Error in GET', error);
-        res.status(500).json({ success: false, error });
+        return res.status(500).json({ success: false, error });
       }
-      break;
     }
     case 'POST': {
       try {
         const { url, customId } = req.body;
-        let urlIdentifier = customId ? customId : randomString();
+        let urlIdentifier = customId || randomString();
         let exists = await Link.findOne({ urlIdentifier });
 
         while (exists && !customId) {
           urlIdentifier = randomString();
+          // eslint-disable-next-line no-await-in-loop
           exists = await Link.findOne({ urlIdentifier });
         }
 
@@ -49,19 +50,18 @@ export default async (req, res) => {
           originalUrl: urlWithoutProtocol,
           urlIdentifier,
         });
-        res.status(201).json({ success: true, link: created });
+        return res.status(201).json({ success: true, link: created });
       } catch (error) {
+        // eslint-disable-next-line no-console
         console.log('Error in POST', error);
-        res.status(500).json({ success: false, error });
+        return res.status(500).json({ success: false, error });
       }
-      break;
     }
     default: {
-      res.status(400).json({
+      return res.status(400).json({
         success: false,
         error: `Endpoint for ${method} does not exist.`,
       });
-      break;
     }
   }
 };

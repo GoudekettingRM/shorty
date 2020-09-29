@@ -1,4 +1,4 @@
-import dbConnect from '../../../util/dbConnect.js';
+import dbConnect from '../../../util/dbConnect';
 import Link from '../../../models/Link';
 
 dbConnect();
@@ -18,19 +18,24 @@ export default async (req, res) => {
             error: `There is no URL linked with the identifier ${id}.`,
           });
         }
-        res.json({
+        return res.json({
           success: true,
           url: `//${link.originalUrl}`,
         });
-      } catch (error) {}
-      break;
+      } catch (error) {
+        // eslint-disable-next-line no-console
+        console.error(error);
+        return res.status(500).json({
+          success: false,
+          error,
+        });
+      }
     }
     default: {
-      res.status(400).json({
+      return res.status(400).json({
         success: false,
         error: `Endpoint for ${method} does not exist.`,
       });
-      break;
     }
   }
 };
