@@ -8,9 +8,10 @@
     "start": "next start"
   },
   "dependencies": {
+    "@svgr/webpack": "^5.4.0",
     "axios": "^0.20.0",
     "mongoose": "^5.10.7",
-    "next": "9.5.3",
+    "next": "^9.5.5",
     "react": "16.13.1",
     "react-copy-to-clipboard": "^5.0.2",
     "react-dom": "16.13.1"

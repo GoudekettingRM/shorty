@@ -8,6 +8,7 @@ const Home = () => {
   const [shortUrl, setShortUrl] = useState('');
   const [success, setSuccess] = useState(null);
   const [copied, setCopied] = useState(false);
+  const [isDisabled, setIsDisabled] = useState(false);
 
   const createShortUrl = async () => {
     const postData = { url };
@@ -28,19 +29,25 @@ const Home = () => {
   const submit = (event) => {
     event.preventDefault();
 
+    setIsDisabled(true);
     if (!url) {
       // eslint-disable-next-line no-alert
       alert('You need to enter a url.');
     } else {
       createShortUrl();
     }
+    setIsDisabled(false);
   };
 
   return (
     <>
       <form className={success ? 'hidden' : ''}>
+        <h2>
+          Just enter a url and your desired identifier below and you're good to
+          go!
+        </h2>
         <label htmlFor="url">
-          Shorten it!
+          Your url:
           <input
             type="url"
             name="url"
@@ -50,7 +57,7 @@ const Home = () => {
           />
         </label>
         <label htmlFor="customId">
-          Your custom id!
+          Your custom identifier:
           <input
             type="text"
             name="customId"
@@ -58,7 +65,7 @@ const Home = () => {
             onChange={(e) => setCustomId(e.target.value)}
           />
         </label>
-        <button type="submit" onClick={(e) => submit(e)}>
+        <button type="submit" onClick={(e) => submit(e)} disabled={isDisabled}>
           Shortify
         </button>
       </form>
